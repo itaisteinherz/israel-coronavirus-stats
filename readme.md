@@ -1,4 +1,4 @@
-# Israel Corona Stats
+# Israel Coronavirus Stats
 
 Note: As this repo contains a submodule, you should clone it like so:
 

@@ -4,6 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מקרי קורונה בישראל</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+    <script>
+        const parseDateString = dateString => {
+            const parts = dateString.split("-");
+            // Months start at 0.
+            const month = parts[0] - 1;
+            const day = parts[1];
+            const year = parts[2];
+
+            return new Date(year, month, day);
+        };
+        const toDateString = date => {
+            const day = (date.getUTCDate() + 1).toString().padStart(2, "0");
+            const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+            const year = date.getUTCFullYear();
+            return `${month}-${day}-${year}`;
+        };
+
+        const reports = JSON.parse(`{{reports}}`);
+        const sortedDates = Object.keys(reports).map(parseDateString).sort((a, b) => a - b);
+        const sortedKeys = sortedDates.map(toDateString).filter(key => Boolean(reports[key]));
+        const sortedValues = sortedKeys.map(key => reports[key].Confirmed);
+
+        window.onload = () => {
+            const ctx = document.querySelector("#chart").getContext("2d");
+            const chart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: sortedKeys,
+                    datasets: [{
+                        label: "Confirmed Cases",
+                        data: sortedValues,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        };
+    </script>
 </head>
 <body dir="rtl">
     <h1>תאריך:</h1>
@@ -17,5 +67,7 @@
 
     <h1>החלימו:</h1>
     <p id="recovered">{{recovered}}</p>
+
+    <canvas id="chart"></canvas>
 </body>
 </html>

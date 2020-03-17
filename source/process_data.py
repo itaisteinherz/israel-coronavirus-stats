@@ -7,7 +7,6 @@ import csv
 import json
 
 PATH_TO_DAILY_REPORTS = "data/csse_covid_19_data/csse_covid_19_daily_reports"
-OUTPUT_PATH = "israel_reports.json"
 
 
 def load_all_reports(path_to_reports: str):
@@ -56,28 +55,9 @@ def remove_fields(reports: Dict[str, Any], *fields: List[str]):
             reports[date].pop(field)
 
 
-def write_to_file(data: Dict[str, Any], output_path: str):
-    """Write the given JSON data to the given path"""
-    with open(output_path, "w") as output_file:
-        output_file.write(json.dumps(data))
-
-
-def main():
-    print("Loading and parsing all available reports...")
-
+def get_relevant_reports(country):
+    """Get all relevant reports found at the given path"""
     reports = load_all_reports(PATH_TO_DAILY_REPORTS)
-
-    print(f"Found {len(reports.keys())} daily reports.\nProcessing parsed reports...")
-
-    filtered_reports = filter_reports_for_field(reports, "Country/Region", "Israel")
+    filtered_reports = filter_reports_for_field(reports, "Country/Region", country)
     remove_fields(filtered_reports, "Province/State", "Country/Region")
-
-    print(f"Writing processed reports to {OUTPUT_PATH}...")
-
-    write_to_file(filtered_reports, OUTPUT_PATH)
-
-    print("Finished loading, parsing and filtering reports.")
-
-
-if __name__ == '__main__':
-    main()
+    return filtered_reports

@@ -1,16 +1,29 @@
 # Israel Coronavirus Stats
 
-Note: As this repo contains a submodule, you should clone it like so:
+Website containing various statistics on the Coronavirus in Israel.
+
+
+## Development
+
+As this repo contains a submodule, you should clone it like so:
 
 ```bash
 $ git clone --recurse-submodules https://github.com/itaisteinherz/israel-coronavirus-stats.git
 ```
 
-To generate Israel-specific reports, run the following command (in the root directory of the project):
+Then, install the required dependencies in a virtualenv:
 
 ```bash
-$ python process_data.py
+$ pip install -r requirements.txt
 ```
+
+To generate the frontend, run the following command (in the root directory of the project):
+
+```bash
+$ python3 source/generate_frontend.py
+```
+
+The generated frontend will then be in the `dist` directory.
 
 
 ## Disclaimer

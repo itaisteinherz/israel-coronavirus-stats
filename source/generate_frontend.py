@@ -8,7 +8,7 @@ import dateparser
 from process_data import get_relevant_reports
 
 COUNTRY = "Israel"
-TEMPLATE_PATH = "source/client/index.html"
+TEMPLATE_PATH = "source/templates/index.html"
 OUTPUT_DIR = "dist"
 OUTPUT_FILENAME = "index.html"
 

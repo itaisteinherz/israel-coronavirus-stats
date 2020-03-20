@@ -1,7 +1,8 @@
 <script>
-	import { onMount } from "svelte";
+	import { onMount } from 'svelte';
 	import { allStats } from './stores.js';
-	import Chart from "chart.js";
+	import Chart from 'chart.js';
+	import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 	let mounted = false;
 
@@ -23,17 +24,21 @@
 			.filter(date => date.month >= 3);
 		const data = labels.map(({date}) => confirmedTimeline[date]);
 
-		const ctx = document.querySelector(".chart-canvas").getContext("2d");
+		const ctx = document.querySelector('.chart-canvas').getContext('2d');
 		const chart = new Chart(ctx, {
-			type: "line",
+			type: 'line',
 			data: {
 				labels: labels.map(date => `${date.day}.${date.month}`),
 				datasets: [
 					{
-						label: "Confirmed cases",
-						backgroundColor: "rgb(255, 99, 132)",
-						borderColor: "rgb(255, 99, 132)",
-						data
+						label: 'Confirmed cases',
+						data,
+						backgroundColor: 'rgb(255, 99, 132)',
+						borderColor: 'rgb(255, 99, 132)',
+						datalabels: {
+							align: "top",
+							offset: 6
+						}
 					}
 				]
 			},
@@ -60,14 +65,19 @@
 	}
 	
 	.chart-container div {
-		width: 1000px;
+		width: 1100px;
 	}
 	@media (max-width: 1400px) {
+        .chart-container div {
+            width: 1000px;
+        }
+	}
+	@media (max-width: 1200px) {
         .chart-container div {
             width: 900px;
         }
 	}
-	@media (max-width: 1100px) {
+	@media (max-width: 1030px) {
         .chart-container div {
             width: 800px;
         }
@@ -84,17 +94,17 @@
 	}
 	@media (max-width: 680px) {
         .chart-container div {
-            width: 530px;
+            width: 520px;
         }
 	}
 	@media (max-width: 600px) {
         .chart-container div {
-            width: 480px;
+            width: 450px;
         }
 	}
-	@media (max-width: 540px) {
+	@media (max-width: 560px) {
         .chart-container div {
-            width: 430px;
+            width: 400px;
         }
     }
 </style>

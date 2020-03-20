@@ -34,9 +34,12 @@
 </main>
 
 <style>
+	/* To hide horizontal scrollbar */
 	html, body {
-		height: 100%;
 		overflow-x: hidden;
+	}
+	body {
+		position: relative;
 	}
 
 	/* We need the grid to position the footer at the bottom of the page */

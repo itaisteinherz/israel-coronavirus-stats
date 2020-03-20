@@ -5,6 +5,7 @@
 
 	async function mount() {
 		const countryName = "Israel";
+		// TODO: Update this every x seconds, as the data changes.
 		$stats = await fetch(`https://corona.lmao.ninja/countries/${countryName}`).then(r => r.json());
 	}
 
@@ -14,13 +15,13 @@
 <main>
 	<h1>Israel Coronavirus Stats</h1>
 	<Stats/>
+	<!-- TODO: Add link to the GitHub source. -->
 </main>
 
 <style>
 	main {
 		text-align: center;
-		padding: 1em;
-		max-width: 240px;
+		padding: 2em;
 		margin: 0 auto;
 	}
 

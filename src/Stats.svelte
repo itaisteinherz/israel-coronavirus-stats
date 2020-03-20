@@ -3,14 +3,14 @@
 </script>
 
 <div class="stats">
-    <span>
-        Total cases: {$stats['cases']}
+    <span class="cases-today">
+        Cases today: {$stats['todayCases']}
     </span>
     <span>
         Active cases: {$stats['active']}
     </span>
     <span>
-        Cases today: {$stats['todayCases']}
+        Total cases: {$stats['cases']}
     </span>
     <span>
         Recovered: {$stats['recovered']}
@@ -22,15 +22,39 @@
 
 <style>
     .stats {
+        font-size: 1.7vw;
+        font-weight: 100;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         flex-wrap: wrap;
         justify-content: space-around;
         align-items: center;
         align-content: space-around;
     }
 
+    @media (max-width: 1900px) {
+        .stats {
+            font-size: 2.5vw;
+        }
+    }
+    @media (max-width: 1400px) {
+        .stats {
+            font-size: 3vw;
+        }
+    }
+    @media (max-width: 900px) {
+		.stats {
+			font-size: 4vw;
+		}
+    }
+
     .stats span {
         padding: 7px;
+        padding-bottom: 20px;
+    }
+
+    .cases-today {
+        margin-bottom: 8px;
+        font-weight: 300;
     }
 </style>

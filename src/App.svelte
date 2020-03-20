@@ -45,12 +45,13 @@
 	main .contents {
 		text-align: center;
 		padding: 2em;
+		padding-top: 1em;
 		margin: 0 auto;
 	}
 
 	h1 {
 		color: #ff3e00;
-		font-size: 4em;
+		font-size: 3.5em;
 		text-transform: uppercase;
 		font-weight: 100;
 	}

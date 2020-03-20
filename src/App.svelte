@@ -10,6 +10,7 @@
 		// TODO: Update this every x seconds, as the data changes.
 		$stats = await fetch(`https://corona.lmao.ninja/countries/${countryName}`)
 			.then(r => r.json());
+		// TODO: Use `https://corona.lmao.ninja/historical` instead of the API used below (and update the readme accordingly).
 		$allStats = await fetch(`https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code=${countryCode}&timelines=1`)
 			.then(r => r.json());
 	}
@@ -34,14 +35,6 @@
 </main>
 
 <style>
-	/* To hide horizontal scrollbar */
-	html, body {
-		overflow-x: hidden;
-	}
-	body {
-		position: relative;
-	}
-
 	/* We need the grid to position the footer at the bottom of the page */
 	main {
 		height: 100%;
@@ -52,7 +45,6 @@
 
 	main .contents {
 		text-align: center;
-		padding: 2em;
 		padding-top: 1em;
 		margin: 0 auto;
 	}
@@ -77,17 +69,28 @@
 		font-size: 3.5em;
 		text-transform: uppercase;
 		font-weight: 100;
+		margin-left: 0.3em;
+		margin-right: 0.3em;
 	}
-
+	@media (max-width: 750px) {
+		h1 {
+			font-size: 2.5em;
+		}
+	}
 
 	footer {
 		grid-row-start: 2;
 		grid-row-end: 3;
-		padding-bottom: 15px;
+		padding-bottom: 20px;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		justify-content: center;
+	}
+	@media (max-width: 400px) {
+		footer {
+			font-size: 16px;
+		}
 	}
 
 	footer span {

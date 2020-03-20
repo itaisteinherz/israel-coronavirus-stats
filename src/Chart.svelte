@@ -35,7 +35,7 @@
 						data,
 						backgroundColor: 'rgb(255, 99, 132)',
 						borderColor: 'rgb(255, 99, 132)',
-						datalabels: {
+						datalabels: { // TODO: Use a smaller font size on mobile devices.
 							align: "top",
 							offset: 6
 						}
@@ -105,6 +105,11 @@
 	@media (max-width: 560px) {
         .chart-container div {
             width: 400px;
+        }
+	}
+	@media (max-width: 450px) {
+        .chart-container div {
+            width: 350px;
         }
     }
 </style>

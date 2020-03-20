@@ -62,6 +62,7 @@
         align-items: center;
 		align-content: center;
 		margin-top: 20px;
+		margin-bottom: 20px;
 	}
 	
 	.chart-container div {

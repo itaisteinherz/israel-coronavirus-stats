@@ -46,6 +46,7 @@
         justify-content: center;
         align-items: center;
 		align-content: center;
+		margin-top: 20px;
 	}
 	
 	.chart-container div {

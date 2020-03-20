@@ -18,14 +18,31 @@
 </script>
 
 <main>
-	<h1>Israel Coronavirus Stats</h1>
-	<Stats/>
-	<Chart/>
-	<!-- TODO: Add link to the GitHub source. -->
+	<div class="contents">
+		<h1>Israel Coronavirus Stats</h1>
+		<Stats/>
+		<Chart/>
+	</div>
+	<footer>
+		<span>
+			Source code for this website can be found <a href="https://github.com/itaisteinherz/israel-coronavirus-stats" target="_blank">here</a>
+		</span>
+		<a href="https://github.com/itaisteinherz/israel-coronavirus-stats">
+			<img height="24" width="24" src="assets/github.png" alt="GitHub icon" />
+		</a>
+	</footer>
 </main>
 
 <style>
+	/* We need the grid to position the footer at the bottom of the page */
 	main {
+		height: 100%;
+		min-height: 100%;
+		display: grid;
+		grid-template-rows: 1fr auto;
+	}
+
+	main .contents {
 		text-align: center;
 		padding: 2em;
 		margin: 0 auto;
@@ -39,8 +56,22 @@
 	}
 
 	@media (min-width: 640px) {
-		main {
+		main .contents {
 			max-width: none;
 		}
+	}
+
+	footer {
+		grid-row-start: 2;
+		grid-row-end: 3;
+		margin-bottom: 20px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+
+	footer span {
+		margin-right: 7px;
 	}
 </style>

@@ -25,10 +25,14 @@
             return `${month}-${day}-${year}`;
         };
 
-        const reports = JSON.parse(`{{reports}}`);
-        const sortedDates = Object.keys(reports).map(parseDateString).sort((a, b) => a - b);
-        const sortedKeys = sortedDates.map(toDateString).filter(key => Boolean(reports[key]));
-        const sortedValues = sortedKeys.map(key => reports[key].Confirmed);
+        const italyReports = JSON.parse(`{{italy_reports}}`);
+        const southKoreaReports = JSON.parse(`{{south_korea_reports}}`);
+
+        const allReports = JSON.parse(`{{all_reports}}`);
+        const israelReports = JSON.parse(`{{israel_reports}}`);
+        const sortedDates = Object.keys(israelReports).map(parseDateString).sort((a, b) => a - b);
+        const sortedKeys = sortedDates.map(toDateString).filter(key => Boolean(israelReports[key]));
+        const sortedValues = sortedKeys.map(key => israelReports[key].Confirmed);
 
         window.onload = () => {
             const ctx = document.querySelector("#chart").getContext("2d");

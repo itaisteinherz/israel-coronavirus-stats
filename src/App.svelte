@@ -64,7 +64,8 @@
 	footer {
 		grid-row-start: 2;
 		grid-row-end: 3;
-		margin-bottom: 20px;
+		margin-bottom: 10px;
+		padding-bottom: 10px;
 		display: flex;
 		flex-direction: row;
 		align-items: center;

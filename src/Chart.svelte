@@ -11,13 +11,23 @@
 		}
 
 		const confirmedTimeline = stats.locations[0]['timelines']['confirmed']['timeline'];
-		const labels = Object.keys(confirmedTimeline).map(date => new Date(date).toDateString());
-		const data = Object.values(confirmedTimeline);
+		const labels = Object.keys(confirmedTimeline)
+			.map(date => {
+				const dateObj = new Date(date);
+				return {
+					date,
+					month: dateObj.getMonth() + 1,
+					day: dateObj.getDate()
+				};
+			})
+			.filter(date => date.month >= 3);
+		const data = labels.map(({date}) => confirmedTimeline[date]);
+
 		const ctx = document.querySelector(".chart-canvas").getContext("2d");
 		const chart = new Chart(ctx, {
 			type: "line",
 			data: {
-				labels,
+				labels: labels.map(date => `${date.day}.${date.month}`),
 				datasets: [
 					{
 						label: "Confirmed cases",
@@ -82,7 +92,7 @@
             width: 480px;
         }
 	}
-	@media (max-width: 520px) {
+	@media (max-width: 540px) {
         .chart-container div {
             width: 430px;
         }

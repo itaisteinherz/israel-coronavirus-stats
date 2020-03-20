@@ -4,14 +4,14 @@
 
 <div class="stats">
     <!-- TODO: Add date of when the stats where last updated. -->
-    <span class="active-cases">
+    <span class="cases">
+        Cases: {$stats['cases']}
+    </span>
+    <span>
         Active cases: {$stats['active']}
     </span>
     <span>
         Cases today: {$stats['todayCases']}
-    </span>
-    <span>
-        Total cases: {$stats['cases']}
     </span>
     <span>
         Recovered: {$stats['recovered']}
@@ -54,7 +54,7 @@
         padding-bottom: 20px;
     }
 
-    .active-cases {
+    .cases {
         margin-bottom: 8px;
         font-weight: 300;
     }

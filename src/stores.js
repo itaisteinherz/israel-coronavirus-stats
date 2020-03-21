@@ -15,6 +15,13 @@ export const stats = writable({
 	todayDeaths: loadingText
 });
 
+export const allStats = writable({
+	cases: loadingText,
+	deaths: loadingText,
+	recovered: loadingText,
+	updated: loadingText
+});
+
 export const historicalData = writable([{
 	country: loadingText,
 	province: loadingText,

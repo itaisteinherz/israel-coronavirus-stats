@@ -24,7 +24,7 @@
 <style>
     .stats {
         font-size: 1.7vw;
-        font-weight: 100;
+        font-weight: 200;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;

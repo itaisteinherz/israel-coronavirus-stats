@@ -2,20 +2,18 @@
 	import { onMount } from 'svelte';
 	import Stats from './Stats.svelte';
 	import Chart from './Chart.svelte';
-	import { stats, historicalData } from './stores.js';
-	import { countryName, countryCode } from './config.js';
+	import { stats, allStats, historicalData } from './stores.js';
+	import { apiBaseUrl, countryName, countryCode } from './config.js';
 
-	async function mount() {
-		const apiBaseUrl = 'https://corona.lmao.ninja';
-
+	(async () => {
 		// TODO: Update this every x seconds, as the data changes.
 		$stats = await fetch(`${apiBaseUrl}/countries/${countryName}`)
 			.then(r => r.json());
+		$allStats = await fetch(`${apiBaseUrl}/all`)
+			.then(r => r.json());
 		$historicalData = await fetch(`${apiBaseUrl}/historical`)
 			.then(r => r.json());
-	}
-
-	onMount(mount);
+	})();
 </script>
 
 <main>
@@ -23,6 +21,14 @@
 		<h1>Israel Coronavirus Stats</h1>
 		<Stats/>
 		<Chart/>
+		<div class="last-updated"> 
+			<span>
+				Stats were last updated at:
+			</span>
+			<span>
+				{Number.isInteger($allStats['updated']) ? new Date($allStats['updated']).toUTCString() : $allStats['updated']}
+			</span>
+		</div>
 	</div>
 	<footer>
 		<span>
@@ -78,9 +84,22 @@
 		}
 	}
 
+	.last-updated {
+		margin-top: 20px;
+		display: flex;
+		flex-direction: column;
+		color: lightsalmon;
+		font-weight: 200;
+	}
+
+	.last-updated span {
+		padding-top: 10px;
+	}
+
 	footer {
 		grid-row-start: 2;
 		grid-row-end: 3;
+		margin-top: 30px;
 		padding-bottom: 20px;
 		display: flex;
 		flex-direction: row;

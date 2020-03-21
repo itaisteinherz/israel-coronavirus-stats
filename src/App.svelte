@@ -14,6 +14,7 @@
 			.then(r => r.json());
 		const historicalData = await fetch(`${apiBaseUrl}/historical`)
 			.then(r => r.json());
+		// TODO: Convert this to a derived store, and store all historical data stored as well.
 		$allStats = historicalData.find(country => country.country === countryName);
 	}
 

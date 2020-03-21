@@ -1,29 +1,55 @@
 <script>
 	import { onMount } from 'svelte';
-	import { allStats } from './stores.js';
+	import { stats, allStats } from './stores.js';
 	import Chart from 'chart.js';
 	import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 	let mounted = false;
+	let fetchedData = false
 
-	allStats.subscribe(stats => {
-		if (!mounted) {
-			return;
+	// TODO: Create a store for chart data, to simplify usage.
+	let confirmedTimeline = {};
+	let labels = [];
+	let data = [];
+
+	$: {
+		confirmedTimeline = $allStats['timeline']['cases'];
+		if (!fetchedData && Object.keys(confirmedTimeline).length !== 0) {
+			labels = Object.keys(confirmedTimeline)
+				.map(date => {
+					const [month, day] = date.split("/");
+					return {
+						date,
+						month,
+						day
+					};
+				})
+				.filter(date => date.month >= 3);
+			data = labels.map(({date}) => confirmedTimeline[date]);
+			fetchedData = true;
 		}
 
-		const confirmedTimeline = stats['timeline']['cases'];
-		const labels = Object.keys(confirmedTimeline)
-			.map(date => {
-				const [month, day] = date.split("/");
-				return {
-					date,
+		const now = new Date();
+		const month = (now.getMonth() + 1).toString();
+		const day = now.getDate().toString();
+		if (labels.findIndex(label => label.month === month && label.day === day) === -1 && fetchedData) {
+			labels = [
+				...labels,
+				{
+					date: `${month}/${day}/${now.getFullYear()}`,
 					month,
 					day
-				};
-			})
-			.filter(date => date.month >= 3);
-		const data = labels.map(({date}) => confirmedTimeline[date]);
+				}
+			];
+			data = [...data, $stats['cases'].toString()];
+		}
 
+		if (mounted && fetchedData) {
+			renderChart();
+		}
+	}
+
+	function renderChart() {
 		const ctx = document.querySelector('.chart-canvas').getContext('2d');
 		const chart = new Chart(ctx, {
 			type: 'line',
@@ -44,9 +70,12 @@
 			},
 			options: {}
 		});
-	});
+	}
 
-	onMount(() => mounted = true);
+	onMount(() => {
+		mounted = true;
+		renderChart();
+	});
 </script>
 
 <div class="chart-container">

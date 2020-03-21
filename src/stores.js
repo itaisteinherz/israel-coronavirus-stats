@@ -15,7 +15,7 @@ export const stats = writable({
 });
 
 export const allStats = writable({
-	timelines: {
+	timeline: {
 		cases: {},
 		deaths: {},
 		recovered: {}

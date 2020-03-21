@@ -11,14 +11,14 @@
 			return;
 		}
 
-		const confirmedTimeline = stats.locations[0]['timelines']['confirmed']['timeline'];
+		const confirmedTimeline = stats['timeline']['cases'];
 		const labels = Object.keys(confirmedTimeline)
 			.map(date => {
-				const dateObj = new Date(date);
+				const [month, day] = date.split("/");
 				return {
 					date,
-					month: dateObj.getMonth() + 1,
-					day: dateObj.getDate()
+					month,
+					day
 				};
 			})
 			.filter(date => date.month >= 3);

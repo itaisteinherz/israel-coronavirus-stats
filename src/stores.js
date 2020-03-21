@@ -15,20 +15,9 @@ export const stats = writable({
 });
 
 export const allStats = writable({
-	locations: [{
-		timelines: {
-			confirmed: {
-				latest: loadingText,
-				timeline: {}
-			},
-			deaths: {
-				latest: loadingText,
-				timeline: {}
-			},
-			recovered: {
-				latest: loadingText,
-				timeline: {}
-			}
-		}
-	}]
+	timelines: {
+		cases: {},
+		deaths: {},
+		recovered: {}
+	}
 });

@@ -5,14 +5,16 @@
 	import { stats, allStats } from './stores.js';
 
 	async function mount() {
+		const apiBaseUrl = 'https://corona.lmao.ninja';
 		const countryName = 'Israel';
 		const countryCode = 'IL';
+		
 		// TODO: Update this every x seconds, as the data changes.
-		$stats = await fetch(`https://corona.lmao.ninja/countries/${countryName}`)
+		$stats = await fetch(`${apiBaseUrl}/countries/${countryName}`)
 			.then(r => r.json());
-		// TODO: Use `https://corona.lmao.ninja/historical` instead of the API used below (and update the readme accordingly).
-		$allStats = await fetch(`https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code=${countryCode}&timelines=1`)
+		const historicalData = await fetch(`${apiBaseUrl}/historical`)
 			.then(r => r.json());
+		$allStats = historicalData.find(country => country.country === countryName);
 	}
 
 	onMount(mount);

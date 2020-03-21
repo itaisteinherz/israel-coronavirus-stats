@@ -1,38 +1,22 @@
 <script>
 	import { onMount } from 'svelte';
-	import { stats, countryHistory } from './stores.js';
+	import { stats, chartDataset } from './stores.js';
 	import Chart from 'chart.js';
 	import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 	let mounted = false;
-	let fetchedData = false
 
-	// TODO: Create a store for chart data, to simplify usage.
-	let confirmedTimeline = {};
 	let labels = [];
 	let data = [];
 
 	$: {
-		confirmedTimeline = $countryHistory['timeline']['cases'];
-		if (!fetchedData && Object.keys(confirmedTimeline).length !== 0) {
-			labels = Object.keys(confirmedTimeline)
-				.map(date => {
-					const [month, day] = date.split("/");
-					return {
-						date,
-						month,
-						day
-					};
-				})
-				.filter(date => date.month >= 3);
-			data = labels.map(({date}) => confirmedTimeline[date]);
-			fetchedData = true;
-		}
+		labels = $chartDataset['labels'];
+		data = $chartDataset['data'];
 
 		const now = new Date();
 		const month = (now.getMonth() + 1).toString();
 		const day = now.getDate().toString();
-		if (labels.findIndex(label => label.month === month && label.day === day) === -1 && fetchedData) {
+		if (labels.length !== 0 && labels.findIndex(label => label.month === month && label.day === day) === -1) {
 			labels = [
 				...labels,
 				{
@@ -44,12 +28,14 @@
 			data = [...data, $stats['cases'].toString()];
 		}
 
-		if (mounted && fetchedData) {
-			renderChart();
-		}
+		renderChart();
 	}
 
 	function renderChart() {
+		if (!mounted) {
+			return;
+		}
+
 		const ctx = document.querySelector('.chart-canvas').getContext('2d');
 		const chart = new Chart(ctx, {
 			type: 'line',
@@ -72,10 +58,7 @@
 		});
 	}
 
-	onMount(() => {
-		mounted = true;
-		renderChart();
-	});
+	onMount(() => mounted = true);
 </script>
 
 <div class="chart-container">

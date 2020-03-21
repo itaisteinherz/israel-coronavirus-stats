@@ -35,3 +35,24 @@ export const countryHistory = derived(
 		}
 	}
 );
+
+export const chartDataset = derived(
+	countryHistory,
+	$countryHistory => {
+		const casesTimeline = $countryHistory['timeline']['cases'];
+		const labels = Object.keys(casesTimeline)
+			.map(date => {
+				const [month, day] = date.split("/");
+				return {
+					date,
+					month,
+					day
+				};
+			})
+			.filter(date => date.month >= 3);
+		return {
+			labels,
+			data: labels.map(({date}) => casesTimeline[date])
+		};
+	}
+);

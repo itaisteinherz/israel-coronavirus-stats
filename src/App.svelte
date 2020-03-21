@@ -2,20 +2,17 @@
 	import { onMount } from 'svelte';
 	import Stats from './Stats.svelte';
 	import Chart from './Chart.svelte';
-	import { stats, allStats } from './stores.js';
+	import { stats, historicalData } from './stores.js';
+	import { countryName, countryCode } from './config.js';
 
 	async function mount() {
 		const apiBaseUrl = 'https://corona.lmao.ninja';
-		const countryName = 'Israel';
-		const countryCode = 'IL';
-		
+
 		// TODO: Update this every x seconds, as the data changes.
 		$stats = await fetch(`${apiBaseUrl}/countries/${countryName}`)
 			.then(r => r.json());
-		const historicalData = await fetch(`${apiBaseUrl}/historical`)
+		$historicalData = await fetch(`${apiBaseUrl}/historical`)
 			.then(r => r.json());
-		// TODO: Convert this to a derived store, and store all historical data stored as well.
-		$allStats = historicalData.find(country => country.country === countryName);
 	}
 
 	onMount(mount);

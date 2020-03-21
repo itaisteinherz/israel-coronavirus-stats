@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { stats, allStats } from './stores.js';
+	import { stats, countryHistory } from './stores.js';
 	import Chart from 'chart.js';
 	import ChartDataLabels from 'chartjs-plugin-datalabels';
 
@@ -13,7 +13,7 @@
 	let data = [];
 
 	$: {
-		confirmedTimeline = $allStats['timeline']['cases'];
+		confirmedTimeline = $countryHistory['timeline']['cases'];
 		if (!fetchedData && Object.keys(confirmedTimeline).length !== 0) {
 			labels = Object.keys(confirmedTimeline)
 				.map(date => {

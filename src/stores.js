@@ -1,4 +1,5 @@
-import { writable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
+import { countryName } from './config.js';
 
 const loadingText = "loading...";
 
@@ -14,10 +15,23 @@ export const stats = writable({
 	todayDeaths: loadingText
 });
 
-export const allStats = writable({
+export const historicalData = writable([{
+	country: loadingText,
+	province: loadingText,
 	timeline: {
 		cases: {},
 		deaths: {},
 		recovered: {}
 	}
-});
+}]);
+
+export const countryHistory = derived(
+	historicalData,
+	$historicalData => $historicalData.find(country => country.country === countryName) || {
+		timeline: {
+			cases: {},
+			deaths: {},
+			recovered: {}
+		}
+	}
+);

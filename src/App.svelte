@@ -90,6 +90,12 @@
 		flex-direction: column;
 		color: lightsalmon;
 		font-weight: 200;
+		font-size: 1em;
+	}
+	@media (max-width: 500px) {
+		.last-updated {
+			font-size: 0.85em;
+		}
 	}
 
 	.last-updated span {
@@ -101,6 +107,7 @@
 		grid-row-end: 3;
 		margin-top: 30px;
 		padding-bottom: 20px;
+		font-size: 16px;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
@@ -108,7 +115,7 @@
 	}
 	@media (max-width: 400px) {
 		footer {
-			font-size: 16px;
+			font-size: 14px;
 		}
 	}
 

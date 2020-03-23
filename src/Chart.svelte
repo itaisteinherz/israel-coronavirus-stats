@@ -85,8 +85,10 @@
 
 <div class="chart-container">
 	<div class="toggle-approximation">
-		<input type=checkbox bind:checked={showApproximation} name="show-approximation">
-		<label for="show-approximation">Show exponential approximation</label><br>
+		<label>
+			<input type=checkbox bind:checked={showApproximation}>
+			Show exponential approximation
+		</label>
 	</div>
 	<div>
 		<canvas class="chart-canvas"></canvas>
@@ -104,14 +106,8 @@
 		margin-bottom: 20px;
 	}
 
-	.toggle-approximation {
-		display: inline-flex;
-		justify-content: center;
-		align-items: baseline; /* TODO: Fix this so that the checkbox and label will be centered on the same horizontal line. */
-	}
-
 	.toggle-approximation input {
-		margin-right: 5px;
+		margin-right: 2px;
 	}
 	
 	.chart-container div {

@@ -11,7 +11,7 @@
 			.then(r => r.json());
 		$allStats = await fetch(`${apiBaseUrl}/all`)
 			.then(r => r.json());
-		$historicalData = await fetch(`${apiBaseUrl}/historical`)
+		$historicalData = await fetch(`${apiBaseUrl}/historical/${countryName}`)
 			.then(r => r.json());
 	})();
 </script>

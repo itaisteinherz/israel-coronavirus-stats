@@ -22,31 +22,18 @@ export const allStats = writable({
 	updated: loadingText
 });
 
-export const historicalData = writable([{
-	country: loadingText,
-	province: loadingText,
+export const historicalData = writable({
 	timeline: {
 		cases: {},
 		deaths: {},
 		recovered: {}
 	}
-}]);
-
-export const countryHistory = derived(
-	historicalData,
-	$historicalData => $historicalData.find(country => country.country === countryName) || {
-		timeline: {
-			cases: {},
-			deaths: {},
-			recovered: {}
-		}
-	}
-);
+});
 
 export const chartDataset = derived(
-	countryHistory,
-	$countryHistory => {
-		const casesTimeline = $countryHistory['timeline']['cases'];
+	historicalData,
+	$historicalData => {
+		const casesTimeline = $historicalData['timeline']['cases'];
 		const labels = Object.keys(casesTimeline)
 			.map(date => {
 				const [month, day] = date.split("/");

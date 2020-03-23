@@ -1,25 +1,35 @@
 {
-  "name": "israel-coronavirus-stats",
-  "version": "0.0.0",
-  "public": false,
-  "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "start": "sirv public"
-  },
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^11.0.0",
-    "@rollup/plugin-node-resolve": "^7.0.0",
-    "rollup": "^1.20.0",
-    "rollup-plugin-livereload": "^1.0.0",
-    "rollup-plugin-svelte": "^5.0.3",
-    "rollup-plugin-terser": "^5.1.2",
-    "svelte": "^3.0.0"
-  },
-  "dependencies": {
-    "chart.js": "^2.9.3",
-    "chartjs-plugin-datalabels": "^0.7.0",
-    "regression": "^2.0.1",
-    "sirv-cli": "^0.4.4"
-  }
+	"name": "israel-coronavirus-stats",
+	"version": "0.0.0",
+	"private": true,
+	"license": "MIT",
+	"repository": "itaisteinherz/israel-coronavirus-stats",
+	"author": {
+		"name": "Itai Steinherz",
+		"email": "itaisteinherz@gmail.com",
+		"url": "https://netoani.com"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"scripts": {
+		"build": "rollup -c",
+		"dev": "rollup -c -w",
+		"start": "sirv public"
+	},
+	"dependencies": {
+		"chart.js": "^2.9.3",
+		"chartjs-plugin-datalabels": "^0.7.0",
+		"regression": "^2.0.1",
+		"sirv-cli": "^0.4.4"
+	},
+	"devDependencies": {
+		"@rollup/plugin-commonjs": "^11.0.0",
+		"@rollup/plugin-node-resolve": "^7.0.0",
+		"rollup": "^1.20.0",
+		"rollup-plugin-livereload": "^1.0.0",
+		"rollup-plugin-svelte": "^5.0.3",
+		"rollup-plugin-terser": "^5.1.2",
+		"svelte": "^3.0.0"
+	}
 }

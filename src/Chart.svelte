@@ -8,6 +8,8 @@
 	import { stats, chartDataset } from './stores.js';
 	import * as utils from './utils.js';
 
+	Chart.defaults.global.legend.display = false; // Disable chart legend, as it's unnecessary.
+
 	let mounted = false;
 
 	let dates = [];
@@ -29,39 +31,56 @@
 		renderChart();
 	}
 
+	const datalabelOptions = { // TODO: Use a smaller font size on mobile devices.
+		display: 'auto',
+		anchor: 'end',
+		clamp: true,
+		align: 'left',
+		offset: 6
+	};
+	const noDatalabels = {
+		labels: {
+			title: null // This disables the labels for the current dataset
+		}
+	};
+
 	function renderChart() {
 		if (!mounted) {
 			return;
 		}
 
-		const datasets = [
-			{
-				label: 'Confirmed cases',
-				data,
-				backgroundColor: 'rgba(255, 99, 132, 0.6)',
-				borderColor: 'rgb(255, 99, 132)',
-				datalabels: { // TODO: Use a smaller font size on mobile devices.
-					align: 'top',
-					offset: 6
-				}
+		let additionalDataset = [];
+
+		if (showApproximation && dates.length !== 0) {
+			// Calculate predicted values for the next two weeks
+			const predictedDaysCount = 14;
+
+			const startDay = utils.daysAfterYearBegan(dates[0]);
+			const approximationPoints = data.map((point, index) => [Math.floor(utils.daysAfterYearBegan(dates[index])) - startDay, point]);
+			const exponentialApproximation = regression.exponential(approximationPoints); // TODO: Create a separate file for regression-related logic.
+			let approximationData = exponentialApproximation.points.map(point => point[1]);
+
+			const lastDate = dates[dates.length - 1];
+			const newDates = [];
+			const newData = [];
+			for (let i = 1; i < predictedDaysCount + 1; i++) {
+				newDates.push(lastDate.clone().add(i, 'days'));
+
+				const dayNumber = Math.floor(utils.daysAfterYearBegan(lastDate.clone())) - startDay + i;
+				const predictedPoint = exponentialApproximation.predict(dayNumber);
+				newData.push(Math.floor(predictedPoint[1]));
 			}
-		];
 
-		if (showApproximation) {
-			const approximationPoints = data.map((point, index) => [dates[index].date(), point]);
-			const exponentialApproximation = regression.exponential(approximationPoints);
+			dates = [...dates, ...newDates];
+			approximationData = [...approximationData, ...newData];
 
-			datasets.unshift({
+			additionalDataset = [{
 				label: 'Confirmed cases - Exponential Approximation',
-				data: exponentialApproximation.points.map(point => point[1]),
-				borderColor: '#3368FF',
-				datalabels: {
-					align: 'bottom',
-					labels: {
-						title: null // Disable labels for the approximation graph
-					}
-				}
-			});
+				data: approximationData,
+				borderColor: 'rgb(51, 104, 255)',
+				backgroundColor: 'rgba(7, 35, 113, 0.4)',
+				datalabels: datalabelOptions
+			}];
 		}
 
 		const ctx = document.querySelector('.chart-canvas').getContext('2d');
@@ -69,7 +88,20 @@
 			type: 'line',
 			data: {
 				labels: dates.map(utils.formatLabel),
-				datasets
+				datasets: [
+					{
+						label: 'Confirmed cases',
+						data,
+						backgroundColor: 'rgba(255, 99, 132, 0.6)',
+						borderColor: 'rgb(255, 99, 132)',
+						// Only show the labels when the approximation graph isn't displayed
+						datalabels: showApproximation ? noDatalabels : datalabelOptions
+					},
+					...additionalDataset
+				]
+			},
+			options: {
+				events: [] // Disable all events (to fix some weird Chart.js bug)
 			}
 		});
 	}

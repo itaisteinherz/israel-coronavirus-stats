@@ -1,33 +1,27 @@
 <script>
 	import { onMount } from 'svelte';
-	import { stats, chartDataset } from './stores.js';
 	import Chart from 'chart.js';
 	import ChartDataLabels from 'chartjs-plugin-datalabels';
 	import regression from 'regression';
+	import moment from 'moment';
+
+	import { stats, chartDataset } from './stores.js';
+	import * as utils from './utils.js';
 
 	let mounted = false;
 
-	let labels = [];
+	let dates = [];
 	let data = [];
 	let showApproximation = false;
 
 	$: {
-		labels = $chartDataset['labels'];
+		dates = $chartDataset['dates'];
 		data = $chartDataset['data'];
 
-		const now = new Date();
-		const month = (now.getMonth() + 1).toString();
-		const day = now.getDate().toString();
+		const now = moment();
 
-		if (labels.length !== 0 && labels.findIndex(label => label.month === month && label.day === day) === -1) {
-			labels = [
-				...labels,
-				{
-					date: `${month}/${day}/${now.getFullYear()}`,
-					month,
-					day
-				}
-			];
+		if (dates.length !== 0 && !dates.some(label => label.month() === now.month() && label.date() === now.date())) {
+			dates = [...dates, now];
 			data = [...data, parseInt($stats['cases'])];
 		}
 
@@ -54,10 +48,10 @@
 		];
 
 		if (showApproximation) {
-			const approximationPoints = data.map((point, index) => [parseInt(labels[index].day), point]);
+			const approximationPoints = data.map((point, index) => [dates[index].date(), point]);
 			const exponentialApproximation = regression.exponential(approximationPoints);
 
-			datasets.push({
+			datasets.unshift({
 				label: 'Confirmed cases - Exponential Approximation',
 				data: exponentialApproximation.points.map(point => point[1]),
 				borderColor: '#3368FF',
@@ -74,7 +68,7 @@
 		const chart = new Chart(ctx, {
 			type: 'line',
 			data: {
-				labels: labels.map(date => `${date.day}.${date.month}`),
+				labels: dates.map(utils.formatLabel),
 				datasets
 			}
 		});
@@ -104,6 +98,13 @@
 		align-content: center;
 		margin-top: 20px;
 		margin-bottom: 20px;
+	}
+
+	/* Disable highlighting the label text */
+	.toggle-approximation label {
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		user-select: none;
 	}
 
 	.toggle-approximation input {

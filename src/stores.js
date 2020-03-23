@@ -1,5 +1,5 @@
 import { writable, derived } from 'svelte/store';
-import { countryName } from './config.js';
+import { parseDate, formatDate } from './utils.js';
 
 const loadingText = "loading...";
 
@@ -34,19 +34,12 @@ export const chartDataset = derived(
 	historicalData,
 	$historicalData => {
 		const casesTimeline = $historicalData['timeline']['cases'];
-		const labels = Object.keys(casesTimeline)
-			.map(date => {
-				const [month, day] = date.split("/");
-				return {
-					date,
-					month,
-					day
-				};
-			})
-			.filter(date => date.month >= 3);
+		const dates = Object.keys(casesTimeline)
+			.map(dateString => parseDate(dateString))
+			.filter(date => date.month() >= 2); // We're only interested in data starting from March 1st
 		return {
-			labels,
-			data: labels.map(({date}) => casesTimeline[date])
+			dates,
+			data: dates.map(date => casesTimeline[formatDate(date)])
 		};
 	}
 );

@@ -5,19 +5,19 @@
 <div class="stats">
 	<!-- TODO: Add date of when the stats where last updated. -->
 	<span class="cases">
-		Cases: {$stats['cases']}
+		Cases: {$stats['cases'].toLocaleString()}
 	</span>
 	<span>
-		Active cases: {$stats['active']}
+		Active cases: {$stats['active'].toLocaleString()}
 	</span>
 	<span>
-		Cases today: {$stats['todayCases']}
+		Cases today: {$stats['todayCases'].toLocaleString()}
 	</span>
 	<span>
-		Recovered: {$stats['recovered']}
+		Recovered: {$stats['recovered'].toLocaleString()}
 	</span>
 	<span>
-		Deaths: {$stats['deaths']}
+		Deaths: {$stats['deaths'].toLocaleString()}
 	</span>
 </div>
 

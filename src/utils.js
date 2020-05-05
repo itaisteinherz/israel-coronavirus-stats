@@ -2,7 +2,8 @@ import moment from 'moment';
 
 const DATE_FORMAT = 'M/D/YY';
 const LABEL_FORMAT = 'DD.MM';
-const START_YEAR = 2020;
+export const START_YEAR = 2020;
+export const START_MONTH = 2;
 
 export const parseDate = dateString => moment(dateString, DATE_FORMAT);
 

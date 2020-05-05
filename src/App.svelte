@@ -1,8 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
+	import moment from 'moment';
 	import Stats from './Stats.svelte';
 	import Chart from './Chart.svelte';
 	import { stats, allStats, historicalData } from './stores.js';
+	import { differenceInDays, START_YEAR, START_MONTH } from './utils.js';
 	import { apiBaseUrl, countryName, countryCode } from './config.js';
 
 	(async () => {
@@ -11,7 +13,11 @@
 			.then(r => r.json());
 		$allStats = await fetch(`${apiBaseUrl}/all`)
 			.then(r => r.json());
-		$historicalData = await fetch(`${apiBaseUrl}/v2/historical/${countryName}`)
+
+		const now = moment();
+		const beginningOfMarch = moment({year: START_YEAR, month: START_MONTH}); // First day of March 2020
+		const daysSinceBeginning = Math.floor(differenceInDays(beginningOfMarch, now));
+		$historicalData = await fetch(`${apiBaseUrl}/historical/${countryName}?lastdays=${daysSinceBeginning}`)
 			.then(r => r.json());
 	})();
 </script>

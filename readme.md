@@ -9,7 +9,7 @@ This project by no means serves as medical guidance, nor is it a commercial proj
 
 ### Sources
 
-- Stats are from [WorldMeter](https://www.worldometers.info/coronavirus/) (the full list of sources can be found there), fetched using the [NovelCOVID API](https://github.com/NovelCOVID/API).
+- Stats are from [WorldoMeters](https://www.worldometers.info/coronavirus/) (the full list of sources can be found there), fetched using the [NovelCOVID API](https://github.com/NovelCOVID/API).
 - Chart is generated using data from the [2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository](https://github.com/CSSEGISandData/COVID-19), fetched using the [NovelCOVID API](https://github.com/NovelCOVID/API).
 
 

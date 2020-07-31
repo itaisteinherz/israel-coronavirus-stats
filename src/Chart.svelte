@@ -15,6 +15,7 @@
 	let dates = [];
 	let data = [];
 	let showApproximation = false;
+	let approximationInfo = "";
 
 	$: {
 		dates = $chartDataset['dates'];
@@ -28,6 +29,7 @@
 		}
 
 		showApproximation = showApproximation; // We do this so that Svelte will know to rerender the chart when the value changes.
+		approximationInfo = ""; // We do this so that Svelte will clear the approximation info when the user isnt seeing the approximation.
 		renderChart();
 	}
 
@@ -84,6 +86,7 @@
 				...newDates
 			];
 			approximationData = [...approximationData, ...newData];
+			approximationInfo = `${exponentialApproximation.string} (r2 = ${exponentialApproximation.r2})`;
 
 			additionalDatasets = [{
 				label: 'Confirmed cases - Exponential Approximation',
@@ -126,6 +129,9 @@
 			<input type=checkbox bind:checked={showApproximation}>
 			Show exponential approximation
 		</label>
+		<span class="approximation-info">
+			{approximationInfo}
+		</span>
 	</div>
 	<div>
 		<canvas class="chart-canvas"></canvas>

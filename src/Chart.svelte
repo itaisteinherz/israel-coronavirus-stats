@@ -54,11 +54,16 @@
 		if (showApproximation && dates.length !== 0) {
 			// Calculate predicted values for the next two weeks
 			const predictedDaysCount = 14;
-			// Start at two weeks ago.
+			// Start at two weeks ago
 			const startPeriodDayCount = 14;
 
-			const startDay = utils.daysAfterYearBegan(dates[0]);
-			const approximationPoints = data.map((point, index) => [utils.daysAfterYearBegan(dates[index]) - startDay, point]);
+			const startDateIndex = dates.length - startPeriodDayCount;
+			const startDate = dates[startDateIndex];
+			const startDay = utils.daysAfterYearBegan(startDate);
+
+			const approximationPoints = data
+				.filter((point, index) => index >= startDateIndex)
+				.map((point, index) => [utils.daysAfterYearBegan(dates[startDateIndex + index]) - startDay, point]);
 			const exponentialApproximation = regression.exponential(approximationPoints); // TODO: Create a separate file for regression-related logic.
 			let approximationData = exponentialApproximation.points.map(point => Math.floor(point[1]));
 
@@ -73,8 +78,9 @@
 				newData.push(Math.floor(predictedPoint[1]));
 			}
 
+			data = data.filter((point, index) => utils.daysAfterYearBegan(dates[index]) >= startDay);
 			dates = [
-				...dates,
+				...(dates.filter(date => utils.differenceInDays(startDate, date) >= 0)),
 				...newDates
 			];
 			approximationData = [...approximationData, ...newData];

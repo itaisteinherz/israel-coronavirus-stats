@@ -49,16 +49,18 @@
 			return;
 		}
 
-		let additionalDataset = [];
+		let additionalDatasets = [];
 
 		if (showApproximation && dates.length !== 0) {
 			// Calculate predicted values for the next two weeks
 			const predictedDaysCount = 14;
+			// Start at two weeks ago.
+			const startPeriodDayCount = 14;
 
 			const startDay = utils.daysAfterYearBegan(dates[0]);
-			const approximationPoints = data.map((point, index) => [Math.floor(utils.daysAfterYearBegan(dates[index])) - startDay, point]);
+			const approximationPoints = data.map((point, index) => [utils.daysAfterYearBegan(dates[index]) - startDay, point]);
 			const exponentialApproximation = regression.exponential(approximationPoints); // TODO: Create a separate file for regression-related logic.
-			let approximationData = exponentialApproximation.points.map(point => point[1]);
+			let approximationData = exponentialApproximation.points.map(point => Math.floor(point[1]));
 
 			const lastDate = dates[dates.length - 1];
 			const newDates = [];
@@ -66,15 +68,18 @@
 			for (let i = 1; i < predictedDaysCount + 1; i++) {
 				newDates.push(lastDate.clone().add(i, 'days'));
 
-				const dayNumber = Math.floor(utils.daysAfterYearBegan(lastDate.clone())) - startDay + i;
+				const dayNumber = utils.daysAfterYearBegan(lastDate.clone()) - startDay + i;
 				const predictedPoint = exponentialApproximation.predict(dayNumber);
 				newData.push(Math.floor(predictedPoint[1]));
 			}
 
-			dates = [...dates, ...newDates];
+			dates = [
+				...dates,
+				...newDates
+			];
 			approximationData = [...approximationData, ...newData];
 
-			additionalDataset = [{
+			additionalDatasets = [{
 				label: 'Confirmed cases - Exponential Approximation',
 				data: approximationData,
 				borderColor: 'rgb(51, 104, 255)',
@@ -97,7 +102,7 @@
 						// Only show the labels when the approximation graph isn't displayed
 						datalabels: showApproximation ? noDatalabels : datalabelOptions
 					},
-					...additionalDataset
+					...additionalDatasets
 				]
 			},
 			options: {

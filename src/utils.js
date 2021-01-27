@@ -13,4 +13,4 @@ export const formatLabel = date => date.format(LABEL_FORMAT);
 
 export const differenceInDays = (start, end) => moment.duration(end.diff(start)).asDays();
 
-export const daysAfterYearBegan = date => differenceInDays(moment({year: START_YEAR}), date);
+export const daysAfterYearBegan = date => Math.floor(differenceInDays(moment({year: START_YEAR}), date));

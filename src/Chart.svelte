@@ -15,6 +15,7 @@
 	let dates = [];
 	let data = [];
 	let showApproximation = false;
+	let approximationInfo = "";
 
 	$: {
 		dates = $chartDataset['dates'];
@@ -28,6 +29,7 @@
 		}
 
 		showApproximation = showApproximation; // We do this so that Svelte will know to rerender the chart when the value changes.
+		approximationInfo = ""; // We do this so that Svelte will clear the approximation info when the user isnt seeing the approximation.
 		renderChart();
 	}
 
@@ -49,16 +51,23 @@
 			return;
 		}
 
-		let additionalDataset = [];
+		let additionalDatasets = [];
 
 		if (showApproximation && dates.length !== 0) {
 			// Calculate predicted values for the next two weeks
 			const predictedDaysCount = 14;
+			// Start at two weeks ago
+			const startPeriodDayCount = 14;
 
-			const startDay = utils.daysAfterYearBegan(dates[0]);
-			const approximationPoints = data.map((point, index) => [Math.floor(utils.daysAfterYearBegan(dates[index])) - startDay, point]);
+			const startDateIndex = dates.length - startPeriodDayCount;
+			const startDate = dates[startDateIndex];
+			const startDay = utils.daysAfterYearBegan(startDate);
+
+			const approximationPoints = data
+				.filter((point, index) => index >= startDateIndex)
+				.map((point, index) => [utils.daysAfterYearBegan(dates[startDateIndex + index]) - startDay, point]);
 			const exponentialApproximation = regression.exponential(approximationPoints); // TODO: Create a separate file for regression-related logic.
-			let approximationData = exponentialApproximation.points.map(point => point[1]);
+			let approximationData = exponentialApproximation.points.map(point => Math.floor(point[1]));
 
 			const lastDate = dates[dates.length - 1];
 			const newDates = [];
@@ -66,15 +75,20 @@
 			for (let i = 1; i < predictedDaysCount + 1; i++) {
 				newDates.push(lastDate.clone().add(i, 'days'));
 
-				const dayNumber = Math.floor(utils.daysAfterYearBegan(lastDate.clone())) - startDay + i;
+				const dayNumber = utils.daysAfterYearBegan(lastDate.clone()) - startDay + i;
 				const predictedPoint = exponentialApproximation.predict(dayNumber);
 				newData.push(Math.floor(predictedPoint[1]));
 			}
 
-			dates = [...dates, ...newDates];
+			data = data.filter((point, index) => utils.daysAfterYearBegan(dates[index]) >= startDay);
+			dates = [
+				...(dates.filter(date => utils.differenceInDays(startDate, date) >= 0)),
+				...newDates
+			];
 			approximationData = [...approximationData, ...newData];
+			approximationInfo = `${exponentialApproximation.string} (r2 = ${exponentialApproximation.r2})`;
 
-			additionalDataset = [{
+			additionalDatasets = [{
 				label: 'Confirmed cases - Exponential Approximation',
 				data: approximationData,
 				borderColor: 'rgb(51, 104, 255)',
@@ -97,7 +111,7 @@
 						// Only show the labels when the approximation graph isn't displayed
 						datalabels: showApproximation ? noDatalabels : datalabelOptions
 					},
-					...additionalDataset
+					...additionalDatasets
 				]
 			},
 			options: {
@@ -115,6 +129,9 @@
 			<input type=checkbox bind:checked={showApproximation}>
 			Show exponential approximation
 		</label>
+		<span class="approximation-info">
+			{approximationInfo}
+		</span>
 	</div>
 	<div>
 		<canvas class="chart-canvas"></canvas>
